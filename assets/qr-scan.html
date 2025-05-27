@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner | Adbeam</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Same header as other pages -->
+    </header>
+
+    <section class="qr-scanner">
+        <div class="container">
+            <h1>Scan Recycling Items</h1>
+            <div class="scanner-container">
+                <video id="qr-video" width="100%" playsinline></video>
+                <canvas id="qr-canvas" hidden></canvas>
+                <div id="qr-result" class="alert alert-info" hidden></div>
+            </div>
+            <div class="material-selection">
+                <h3>Select Material Type:</h3>
+                <div class="btn-group">
+                    <button class="btn btn-outline-primary material-btn" data-material="plastic">Plastic</button>
+                    <button class="btn btn-outline-primary material-btn" data-material="glass">Glass</button>
+                    <button class="btn btn-outline-primary material-btn" data-material="aluminum">Aluminum</button>
+                </div>
+            </div>
+            <div id="scan-result" class="mt-4"></div>
+        </div>
+    </section>
+
+    <script>
+        const video = document.getElementById('qr-video');
+        const canvas = document.getElementById('qr-canvas');
+        const result = document.getElementById('qr-result');
+        const scanResult = document.getElementById('scan-result');
+        const ctx = canvas.getContext('2d');
+
+        // Request camera access
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function(stream) {
+                video.srcObject = stream;
+                video.setAttribute('playsinline', true);
+                video.play();
+                requestAnimationFrame(tick);
+            })
+            .catch(function(err) {
+                console.error("Error accessing camera:", err);
+            });
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvas.height = video.videoHeight;
+                canvas.width = video.videoWidth;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                if (code) {
+                    result.hidden = false;
+                    scanResult.innerHTML = `QR Code detected: ${code.data}`;
+                    // You can add your logic here to handle the scanned QR code
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // Handle material selection
+        document.querySelectorAll('.material-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const material = this.getAttribute('data-material');
+                console.log('Selected material:', material);
+                // Add your material handling logic here
+            });
+        });
+    </script>
+</body>
+</html>

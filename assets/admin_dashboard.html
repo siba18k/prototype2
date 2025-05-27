@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Admin Dashboard - Adbeam</title>
+  <style>
+    :root {
+      --primary-green: #22c55e;
+      --primary-green-dark: #16a34a;
+      --secondary-green: #dcfce7;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --background-light: #f9fafb;
+      --border-color: #e5e7eb;
+      --sidebar-width: 280px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background-light);
+      color: var(--text-primary);
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: white;
+      border-right: 1px solid var(--border-color);
+      z-index: 1000;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary-green);
+      color: white;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .nav-menu {
+      padding: 1rem 0;
+    }
+
+    .nav-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-section-title {
+      padding: 0 1.5rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover {
+      background: var(--secondary-green);
+      color: var(--primary-green);
+    }
+
+    .nav-item.active {
+      background: var(--secondary-green);
+      color: var(--primary-green);
+      border-right: 3px solid var(--primary-green);
+    }
+
+    .nav-item i {
+      width: 20px;
+      margin-right: 0.75rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: white;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .content-area {
+      padding: 2rem;
+    }
+
+    /* Dashboard Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .stat-change {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .stat-change.positive {
+      color: var(--primary-green);
+    }
+
+    .stat-change.negative {
+      color: #ef4444;
+    }
+
+    /* Charts */
+    .chart-container {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .chart-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chart-body {
+      padding: 1.5rem;
+    }
+
+    /* Tables */
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .table {
+      margin: 0;
+    }
+
+    .table th {
+      border: none;
+      background: var(--background-light);
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 1rem 1.5rem;
+    }
+
+    .table td {
+      border: none;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      transition: all 0.2s;
+      border: 1px solid;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-green);
+      color: white;
+      border-color: var(--primary-green);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-green-dark);
+      border-color: var(--primary-green-dark);
+      color: white;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border-color: var(--border-color);
+    }
+
+    .btn-outline:hover {
+      background: var(--background-light);
+    }
+
+    .btn-sm {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
+    }
+
+    /* Status badges */
+    .badge {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 12px;
+    }
+
+    .badge-success {
+      background: var(--secondary-green);
+      color: var(--primary-green-dark);
+    }
+
+    .badge-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-danger {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .content-area {
+        padding: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    /* Page specific content */
+    .page-content {
+      display: none;
+    }
+
+    .page-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.875rem;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-green);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="logo">
+        <div class="logo-icon">A</div>
+        Adbeam Admin
+      </a>
+    </div>
+    <div class="nav-menu">
+      <div class="nav-section">
+        <div class="nav-section-title">Overview</div>
+        <button class="nav-item active" data-page="dashboard">
+          <i class="fas fa-chart-line"></i>
+          Dashboard
+        </button>
+        <button class="nav-item" data-page="analytics">
+          <i class="fas fa-chart-bar"></i>
+          Analytics
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Management</div>
+        <button class="nav-item" data-page="users">
+          <i class="fas fa-users"></i>
+          Users
+        </button>
+        <button class="nav-item" data-page="rewards">
+          <i class="fas fa-gift"></i>
+          Rewards
+        </button>
+        <button class="nav-item" data-page="recycling">
+          <i class="fas fa-recycle"></i>
+          Recycling Data
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <button class="nav-item" data-page="settings">
+          <i class="fas fa-cog"></i>
+          Settings
+        </button>
+        <button class="nav-item" data-page="reports">
+          <i class="fas fa-file-alt"></i>
+          Reports
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="d-flex align-items-center">
+        <button class="mobile-menu-btn me-3" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="user-menu">
+        <span class="text-secondary">Welcome, Admin</span>
+        <div class="user-avatar">JD</div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Dashboard Page -->
+      <div class="page-content active" id="dashboard">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: var(--secondary-green); color: var(--primary-green);">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <div class="stat-value">2,847</div>
+            <div class="stat-label">Active Users</div>
+            <div class="stat-change positive">+12.5% this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #dbeafe; color: #3b82f6;">
+                <i class="fas fa-recycle"></i>
+              </div>
+            </div>
+            <div class="stat-value">18,924</div>
+            <div class="stat-label">Items Recycled</div>
+            <div class="stat-change positive">+8.3% this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #fef3c7; color: #f59e0b;">
+                <i class="fas fa-coins"></i>
+              </div>
+            </div>
+            <div class="stat-value">156,320</div>
+            <div class="stat-label">Credits Earned</div>
+            <div class="stat-change positive">+15.2% this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #f3e8ff; color: #8b5cf6;">
+                <i class="fas fa-gift"></i>
+              </div>
+            </div>
+            <div class="stat-value">3,742</div>
+            <div class="stat-label">Rewards Redeemed</div>
+            <div class="stat-change positive">+6.8% this month</div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row">
+          <div class="col-lg-8 mb-4">
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3 class="chart-title">Recycling Activity</h3>
+                <select class="form-control" style="width: auto;">
+                  <option>Last 7 days</option>
+                  <option>Last 30 days</option>
+                  <option>Last 90 days</option>
+                </select>
+              </div>
+              <div class="chart-body">
+                <canvas id="recyclingChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4">
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3 class="chart-title">Top Categories</h3>
+              </div>
+              <div class="chart-body">
+                <canvas id="categoryChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">Recent Activity</h3>
+            <button class="btn btn-outline btn-sm">View All</button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Item</th>
+                <th>Credits</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="activityTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Users Page -->
+      <div class="page-content" id="users">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>User Management</h2>
+          <button class="btn btn-primary" onclick="openModal('addUserModal')">
+            <i class="fas fa-plus me-2"></i>Add User
+          </button>
+        </div>
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">All Users</h3>
+            <input type="search" class="form-control" placeholder="Search users..." style="width: 250px;">
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>University</th>
+                <th>Credits</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rewards Page -->
+      <div class="page-content" id="rewards">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>Rewards Management</h2>
+          <button class="btn btn-primary" onclick="openModal('addRewardModal')">
+            <i class="fas fa-plus me-2"></i>Add Reward
+          </button>
+        </div>
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">Available Rewards</h3>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Reward</th>
+                <th>Cost (Credits)</th>
+                <th>Available</th>
+                <th>Redeemed</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rewardsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Analytics Page -->
+      <div class="page-content" id="analytics">
+        <h2>Analytics</h2>
+        <div class="row">
+          <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3 class="chart-title">User Growth</h3>
+              </div>
+              <div class="chart-body">
+                <canvas id="userGrowthChart" height="250"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+              <div class="chart-header">
+                <h3 class="chart-title">Revenue Trends</h3>
+              </div>
+              <div class="chart-body">
+                <canvas id="revenueChart" height="250"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recycling Data Page -->
+      <div class="page-content" id="recycling">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>Recycling Data</h2>
+          <button class="btn btn-primary">
+            <i class="fas fa-download me-2"></i>Export Data
+          </button>
+        </div>
+        <div class="stats-grid mb-4">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #dbeafe; color: #3b82f6;">
+                <i class="fas fa-wine-bottle"></i>
+              </div>
+            </div>
+            <div class="stat-value">7,524</div>
+            <div class="stat-label">Plastic Items</div>
+            <div class="stat-change positive">+5.2%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #fef3c7; color: #f59e0b;">
+                <i class="fas fa-newspaper"></i>
+              </div>
+            </div>
+            <div class="stat-value">4,892</div>
+            <div class="stat-label">Paper Items</div>
+            <div class="stat-change positive">+3.8%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #f3e8ff; color: #8b5cf6;">
+                <i class="fas fa-beer"></i>
+              </div>
+            </div>
+            <div class="stat-value">3,126</div>
+            <div class="stat-label">Glass Items</div>
+            <div class="stat-change positive">+7.1%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #d1fae5; color: #059669;">
+                <i class="fas fa-can-food"></i>
+              </div>
+            </div>
+            <div class="stat-value">2,382</div>
+            <div class="stat-label">Metal Items</div>
+            <div class="stat-change positive">+4.5%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div class="page-content" id="settings">
+        <h2>Settings</h2>
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="table-container">
+              <div class="table-header">
+                <h3 class="table-title">System Configuration</h3>
+              </div>
+              <div class="p-4">
+                <div class="form-group">
+                  <label class="form-label">Points per Plastic Item</label>
+                  <input type="number" class="form-control" value="5">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Points per Paper Item</label>
+                  <input type="number" class="form-control" value="3">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Points per Glass Item</label>
+                  <input type="number" class="form-control" value="4">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Points per Metal Item</label>
+                  <input type="number" class="form-control" value="6">
+                </div>
+                <button class="btn btn-primary">Save Settings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports Page -->
+      <div class="page-content" id="reports">
+        <h2>Reports</h2>
+        <div class="row">
+          <div class="col-lg-6 mb-4">
+            <div class="table-container">
+              <div class="table-header">
+                <h3 class="table-title">Quick Reports</h3>
+              </div>
+              <div class="p-4">
+                <div class="d-grid gap-3">
+                  <button class="btn btn-outline">
+                    <i class="fas fa-users me-2"></i>User Activity Report
+                  </button>
+                  <button class="btn btn-outline">
+                    <i class="fas fa-recycle me-2"></i>Recycling Summary
+                  </button>
+                  <button class="btn btn-outline">
+                    <i class="fas fa-gift me-2"></i>Rewards Report
+                  </button>
+                  <button class="btn btn-outline">
+                    <i class="fas fa-chart-bar me-2"></i>Analytics Report
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 mb-4">
+            <div class="table-container">
+              <div class="table-header">
+                <h3 class="table-title">Custom Report</h3>
+              </div>
+              <div class="p-4">
+                <div class="form-group">
+                  <label class="form-label">Report Type</label>
+                  <select class="form-control">
+                    <option>User Statistics</option>
+                    <option>Recycling Data</option>
+                    <option>Revenue Analysis</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Date Range</label>
+                  <select class="form-control">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>Custom Range</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary">Generate Report</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add User Modal -->
+  <div class="modal" id="addUserModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New User</h3>
+        <button class="close-btn" onclick="closeModal('addUserModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addUserForm">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">University</label>
+            <input type="text" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <select class="form-control">
+              <option>Student</option>
+              <option>Admin</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addUserModal')">Cancel</button>
+        <button class="btn btn-primary">Add User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Reward Modal -->
+  <div class="modal" id="addRewardModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Reward</h3>
+        <button class="close-btn" onclick="closeModal('addRewardModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addRewardForm">
+          <div class="form-group">
+            <label class="form-label">Reward Name</label>
+            <input type="text" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Credit Cost</label>
+            <input type="number" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quantity Available</label>
+            <input type="number" class="form-control" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addRewardModal')">Cancel</button>
+        <button class="btn btn-primary">Add Reward</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script>
+    // Dashboard functionality
+    class AdminDashboard {
+      constructor() {
+        this.currentPage = 'dashboard';
+        this.initializeEventListeners();
+        this.loadSampleData();
+        this.initializeCharts();
+      }
+
+      initializeEventListeners() {
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.addEventListener('click', (e) => {
+            const page = e.target.dataset.page || e.target.closest('.nav-item').dataset.page;
+            this.navigateToPage(page);
+          });
+        });
+
+        // Mobile menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+          document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+          if (window.innerWidth <= 768) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+              sidebar.classList.remove('open');
+            }
+          }
+        });
+      }
+
+      navigateToPage(page) {
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        document.querySelector(`[data-page="${page}"]`).classList.add('active');
+
+        // Show/hide page content
+        document.querySelectorAll('.page-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(page).classList.add('active');
+
+        // Update page title
+        const pageTitle = page.charAt(0).toUpperCase() + page.slice(1);
+        document.getElementById('pageTitle').textContent = pageTitle;
+
+        this.currentPage = page;
+      }
+
+      loadSampleData() {
+        // Load recent activity
+        const activities = [
+          { user: 'Sarah Johnson', item: 'Plastic Bottle', credits: 5, time: '2 min ago', status: 'verified' },
+          { user: 'Mike Chen', item: 'Aluminum Can', credits: 3, time: '5 min ago', status: 'verified' },
+          { user: 'Emma Davis', item: 'Glass Jar', credits: 4, time: '8 min ago', status: 'pending' },
+          { user: 'Alex Rodriguez', item: 'Paper Cup', credits: 2, time: '12 min ago', status: 'verified' },
+          { user: 'Lisa Wang', item: 'Cardboard Box', credits: 6, time: '15 min ago', status: 'verified' }
+        ];
+
+        const activityTable = document.getElementById('activityTable');
+        activityTable.innerHTML = activities.map(activity => `
+          <tr>
+            <td>${activity.user}</td>
+            <td>${activity.item}</td>
+            <td>${activity.credits}</td>
+            <td>${activity.time}</td>
+            <td><span class="badge badge-${activity.status === 'verified' ? 'success' : 'warning'}">${activity.status}</span></td>
+          </tr>
+        `).join('');
+
+        // Load users data
+        const users = [
+          { name: 'Sarah Johnson', email: 'sarah.j@university.edu', university: 'UC Berkeley', credits: 1250, status: 'active' },
+          { name: 'Mike Chen', email: 'mike.c@university.edu', university: 'Stanford', credits: 890, status: 'active' },
+          { name: 'Emma Davis', email: 'emma.d@university.edu', university: 'UCLA', credits: 2100, status: 'active' },
+          { name: 'Alex Rodriguez', email: 'alex.r@university.edu', university: 'USC', credits: 650, status: 'inactive' },
+          { name: 'Jessica Kim', email: 'jessica.k@university.edu', university: 'CalTech', credits: 1800, status: 'active' },
+          { name: 'David Brown', email: 'david.b@university.edu', university: 'UC San Diego', credits: 430, status: 'active' }
+        ];
+
+        const usersTable = document.getElementById('usersTable');
+        usersTable.innerHTML = users.map(user => `
+          <tr>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.university}</td>
+            <td>${user.credits}</td>
+            <td><span class="badge badge-${user.status === 'active' ? 'success' : 'warning'}">${user.status}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm me-2">Edit</button>
+              <button class="btn btn-outline btn-sm">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+
+        // Load rewards data
+        const rewards = [
+          { name: 'Campus Store 10% Off', cost: 100, available: 50, redeemed: 25, status: 'active' },
+          { name: 'Free Coffee', cost: 50, available: 100, redeemed: 75, status: 'active' },
+          { name: 'Parking Pass (1 day)', cost: 200, available: 20, redeemed: 15, status: 'active' },
+          { name: 'Meal Plan Credit $5', cost: 150, available: 30, redeemed: 8, status: 'inactive' },
+          { name: 'Library Late Fee Waiver', cost: 80, available: 40, redeemed: 12, status: 'active' },
+          { name: 'Campus Gym Day Pass', cost: 120, available: 25, redeemed: 18, status: 'active' }
+        ];
+
+        const rewardsTable = document.getElementById('rewardsTable');
+        rewardsTable.innerHTML = rewards.map(reward => `
+          <tr>
+            <td>${reward.name}</td>
+            <td>${reward.cost}</td>
+            <td>${reward.available}</td>
+            <td>${reward.redeemed}</td>
+            <td><span class="badge badge-${reward.status === 'active' ? 'success' : 'warning'}">${reward.status}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm me-2">Edit</button>
+              <button class="btn btn-outline btn-sm">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      initializeCharts() {
+        // Recycling Activity Chart
+        const recyclingCtx = document.getElementById('recyclingChart').getContext('2d');
+        new Chart(recyclingCtx, {
+          type: 'line',
+          data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+              label: 'Items Recycled',
+              data: [120, 190, 300, 500, 200, 300, 450],
+              borderColor: '#22c55e',
+              backgroundColor: 'rgba(34, 197, 94, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: '#f3f4f6'
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                }
+              }
+            }
+          }
+        });
+
+        // Category Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Plastic', 'Paper', 'Glass', 'Metal'],
+            datasets: [{
+              data: [45, 25, 20, 10],
+              backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#22c55e'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  padding: 20,
+                  usePointStyle: true
+                }
+              }
+            }
+          }
+        });
+
+        // User Growth Chart (Analytics page)
+        const userGrowthCtx = document.getElementById('userGrowthChart');
+        if (userGrowthCtx) {
+          new Chart(userGrowthCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+              datasets: [{
+                label: 'New Users',
+                data: [65, 78, 90, 81, 95, 102],
+                backgroundColor: '#22c55e',
+                borderRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: '#f3f4f6'
+                  }
+                },
+                x: {
+                  grid: {
+                    display: false
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // Revenue Chart (Analytics page)
+        const revenueCtx = document.getElementById('revenueChart');
+        if (revenueCtx) {
+          new Chart(revenueCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+              datasets: [{
+                label: 'Revenue',
+                data: [1200, 1900, 3000, 5000, 2000, 3000],
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: '#f3f4f6'
+                  },
+                  ticks: {
+                    callback: function(value) {
+                      return value;
+                    }
+                  }
+                },
+                x: {
+                  grid: {
+                    display: false
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+
+    // Modal functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('show');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal')) {
+        e.target.classList.remove('show');
+      }
+    });
+
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      new AdminDashboard();
+    });
+
+    // Form submission handlers
+    document.getElementById('addUserForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('User added successfully!');
+      closeModal('addUserModal');
+    });
+
+    document.getElementById('addRewardForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Reward added successfully!');
+      closeModal('addRewardModal');
+    });
+
+    // Search functionality
+    document.querySelectorAll('input[type="search"]').forEach(input => {
+      input.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const table = e.target.closest('.table-container').querySelector('tbody');
+        const rows = table.querySelectorAll('tr');
+        
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+      });
+    });
+
+    // Auto-refresh data every 30 seconds
+    setInterval(() => {
+      if (document.querySelector('.page-content.active').id === 'dashboard') {
+        // Simulate real-time updates
+        const stats = document.querySelectorAll('.stat-value');
+        stats.forEach(stat => {
+          const currentValue = parseInt(stat.textContent.replace(/,/g, ''));
+          const newValue = currentValue + Math.floor(Math.random() * 10);
+          stat.textContent = newValue.toLocaleString();
+        });
+      }
+    }, 30000);
+  </script>
+</body>
+</html>

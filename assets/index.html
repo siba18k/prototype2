@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Adbeam - Recycling Rewards for Campuses</title>
+  <style>
+    /* Modal specific styles */
+    .modal-content {
+      border-radius: 16px;
+      border: none;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid var(--light-gray);
+      padding: 1.5rem;
+    }
+    
+    .modal-body {
+      padding: 2rem;
+    }
+    
+    .form-control, .form-select {
+      border: 2px solid var(--light-gray);
+      border-radius: 12px;
+      padding: 0.875rem 1rem;
+      transition: all 0.2s;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+    }
+    
+    .password-strength {
+      margin-top: 0.5rem;
+    }
+    
+    .strength-bar {
+      height: 4px;
+      background: var(--light-gray);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .strength-fill {
+      height: 100%;
+      transition: all 0.3s;
+      width: 0%;
+    }
+    
+    .strength-weak { background: #ef4444; }
+    .strength-medium { background: #f59e0b; }
+    .strength-strong { background: var(--primary-color); }
+    
+    .strength-text {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      color: var(--light-text);
+    }
+    
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin-right: 0.5rem;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+          <a href="index.html" class="logo">
+            <div class="logo-icon">A</div>
+            Adbeam
+          </a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="Recycling Tracker.html">Recycling Tracker</a></li>
+          <li><a href="recycling_guide.html">Recycling Guide</a></li>
+          <li><a href="qr-scanner.html">QR Scanner</a></li>
+          <li><a href="rewards.html">Rewards</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+      <div class="auth-buttons">
+        <a href="#" class="btn btn-text" data-bs-toggle="modal" data-bs-target="#signinModal">Sign in</a>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">Get started</a>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Rewards for recycling on campus</h1>
+        <p>Adbeam helps colleges encourage sustainable habits by rewarding students for recycling.</p>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">Join Adbeam</a>
+      </div>
+      <div class="hero-image">
+        <img src="recycle1 smaller.jpg" alt="Student scanning recyclable item on Adbeam app">
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Simple, sustainable rewards</h2>
+        <p>Adbeam makes recycling rewarding with an easy-to-use platform for students and administrators.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+          </div>
+          <h3>Earn credits instantly</h3>
+          <p>Students earn credits every time they recycle, with points added instantly to their account.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+            </svg>
+          </div>
+          <h3>Redeem valuable rewards</h3>
+          <p>Convert earned credits into campus store discounts, meal points, or exclusive merchandise.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3>Secure verification</h3>
+          <p>Our system verifies each recycling activity with barcode scanning to prevent fraud.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h3>Track your impact</h3>
+          <p>Monitor your personal recycling metrics and see your environmental contribution in real-time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <h3>Campus leaderboards</h3>
+          <p>Compete with other students and residence halls to boost campus recycling rates.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3>Admin dashboard</h3>
+          <p>Administrators can monitor recycling activity and manage rewards from a powerful dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-title">
+        <h2>How it works</h2>
+        <p>Adbeam makes recycling rewarding in just a few simple steps.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Scan</h3>
+          <p>Scan the barcode on recyclable items using the Adbeam app.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Recycle</h3>
+          <p>Place items in the appropriate recycling bins on campus.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Earn</h3>
+          <p>Earn credits instantly for each verified recycling action.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Redeem</h3>
+          <p>Use credits to claim rewards from participating campus partners.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2>Join campus sustainability leaders</h2>
+        <p>See how Adbeam is transforming recycling programs at colleges nationwide.</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-content">"Since implementing Adbeam, our campus recycling rates have increased by 78%. Students are excited about the rewards, and it's created a culture of sustainability."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="/api/placeholder/48/48" alt="Dr. Lisa Chen">
+            </div>
+            <div class="author-info">
+              <h4>Dr. Lisa Chen</h4>
+              <p>Sustainability Director, Berkeley University</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-content">"The Adbeam platform was easy to implement and our students love it. We've seen participation across all residence halls and a significant reduction in waste going to landfills."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="/api/placeholder/48/48" alt="Michael Torres">
+            </div>
+            <div class="author-info">
+              <h4>Michael Torres</h4>
+              <p>Campus Operations Manager, University of Michigan</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-content">"As a student, earning rewards for something I was already doing anyway is awesome. I've redeemed credits for campus store discounts and even a semester parking pass!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="/api/placeholder/48/48" alt="Jamie Williams">
+            </div>
+            <div class="author-info">
+              <h4>Jamie Williams</h4>
+              <p>Environmental Science Major, UCLA</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-content">"The data insights from Adbeam have been invaluable for our sustainability planning. We can now target specific areas of campus for improvement and track our progress."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="/api/placeholder/48/48" alt="Dr. Robert Johnson">
+            </div>
+            <div class="author-info">
+              <h4>Dr. Robert Johnson</h4>
+              <p>Dean of Facilities, Cornell University</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to transform campus recycling?</h2>
+      <p>Join hundreds of colleges using Adbeam to build a more sustainable future while rewarding students for positive actions.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">Get started</a>
+        <a href="#" class="btn btn-secondary">Contact sales</a>
+      </div>
+    </div>
+  </section>
+  
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column footer-about">
+          <a href="index.html" class="logo">
+            <div class="logo-icon">A</div>
+            Adbeam
+          </a>
+          <p>Rewarding sustainable choices on college campuses across the nation.</p>
+        </div>
+        <div class="footer-column">
+          <h3>Product</h3>
+          <ul class="footer-links">
+            <li><a href="Recycling Tracker.html">Recycling Tracker</a></li>
+            <li><a href="recycling_guide.html">Recycling Guide</a></li>
+            <li><a href="rewards.html">Rewards</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Company</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Resources</h3>
+          <ul class="footer-links">
+            <li><a href="#">Support</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">© 2025 Adbeam, Inc. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" class="social-link">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="social-link">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="social-link">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Signin Modal -->
+  <div class="modal fade" id="signinModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Sign In</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="signinForm">
+            <div class="mb-3">
+              <label for="signinEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="signinEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="signinPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="signinPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Sign In</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comprehensive Signup Modal (from adbeam_signup.html) -->
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Join Adbeam</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-center mb-4 text-muted">Start earning rewards for recycling on your campus</p>
+          
+          <div id="alertContainer"></div>
+
+          <form id="signupForm" novalidate>
+            <div class="mb-3">
+              <label for="university" class="form-label">Select Your University</label>
+              <select class="form-select" id="university" required>
+                <option value="">Choose your university...</option>
+              </select>
+              <div class="form-text">Select your South African university</div>
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">University Email Address</label>
+              <input type="email" class="form-control" id="email" required>
+              <div class="form-text" id="emailHint">Enter your university email address</div>
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="fullName" required>
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="studentNumber" class="form-label">Student Number (Optional)</label>
+              <input type="text" class="form-control" id="studentNumber">
+              <div class="form-text">Your student ID number</div>
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" required minlength="8">
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div class="strength-fill"></div>
+                </div>
+                <div class="strength-text">Password strength: <span id="strengthLevel">Enter a password</span></div>
+              </div>
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="confirmPassword" required>
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="terms" required>
+                <label class="form-check-label" for="terms">
+                  I agree to the <a href="#" style="color: var(--primary-color);">Terms of Service</a> and 
+                  <a href="#" style="color: var(--primary-color);">Privacy Policy</a>
+                </label>
+                <div class="invalid-feedback"></div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+              <div class="spinner"></div>
+              Create Account
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <small class="text-muted">
+              Already have an account? 
+              <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signinModal" style="color: var(--primary-color);">Sign in here</a>
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="index.js"></script>
+  <script>
+    // South African Universities data
+    const saUniversities = [
+      {
+        name: "University of Cape Town",
+        domains: ["@myuct.ac.za", "@uct.ac.za"],
+        code: "UCT"
+      },
+      {
+        name: "University of the Witwatersrand",
+        domains: ["@student.wits.ac.za", "@wits.ac.za"],
+        code: "WITS"
+      },
+      {
+        name: "University of Johannesburg",
+        domains: ["@student.uj.ac.za", "@uj.ac.za"],
+        code: "UJ"
+      },
+      {
+        name: "Stellenbosch University",
+        domains: ["@sun.ac.za", "@student.sun.ac.za"],
+        code: "SUN"
+      },
+      {
+        name: "University of Pretoria",
+        domains: ["@tuks.co.za", "@up.ac.za"],
+        code: "UP"
+      },
+      {
+        name: "University of KwaZulu-Natal",
+        domains: ["@ukzn.ac.za", "@student.ukzn.ac.za"],
+        code: "UKZN"
+      },
+      {
+        name: "Rhodes University",
+        domains: ["@ru.ac.za", "@campus.ru.ac.za"],
+        code: "RU"
+      },
+      {
+        name: "North-West University",
+        domains: ["@nwu.ac.za", "@student.nwu.ac.za"],
+        code: "NWU"
+      },
+      {
+        name: "University of the Free State",
+        domains: ["@ufs.ac.za", "@student.ufs.ac.za"],
+        code: "UFS"
+      },
+      {
+        name: "University of the Western Cape",
+        domains: ["@uwc.ac.za", "@student.uwc.ac.za"],
+        code: "UWC"
+      },
+      {
+        name: "Cape Peninsula University of Technology",
+        domains: ["@cput.ac.za", "@student.cput.ac.za"],
+        code: "CPUT"
+      },
+      {
+        name: "Durban University of Technology",
+        domains: ["@dut.ac.za", "@student.dut.ac.za"],
+        code: "DUT"
+      },
+      {
+        name: "Tshwane University of Technology",
+        domains: ["@tut.ac.za", "@student.tut.ac.za"],
+        code: "TUT"
+      },
+      {
+        name: "Vaal University of Technology",
+        domains: ["@vut.ac.za", "@student.vut.ac.za"],
+        code: "VUT"
+      },
+      {
+        name: "Central University of Technology",
+        domains: ["@cut.ac.za", "@student.cut.ac.za"],
+        code: "CUT"
+      },
+      {
+        name: "Mangosuthu University of Technology",
+        domains: ["@mut.ac.za", "@student.mut.ac.za"],
+        code: "MUT"
+      },
+      {
+        name: "Walter Sisulu University",
+        domains: ["@wsu.ac.za", "@student.wsu.ac.za"],
+        code: "WSU"
+      },
+      {
+        name: "University of Fort Hare",
+        domains: ["@ufh.ac.za", "@student.ufh.ac.za"],
+        code: "UFH"
+      },
+      {
+        name: "University of Limpopo",
+        domains: ["@ul.ac.za", "@student.ul.ac.za"],
+        code: "UL"
+      },
+      {
+        name: "University of Venda",
+        domains: ["@univen.ac.za", "@student.univen.ac.za"],
+        code: "UNIVEN"
+      },
+      {
+        name: "University of Zululand",
+        domains: ["@uzulu.ac.za", "@student.uzulu.ac.za"],
+        code: "UZULU"
+      },
+      {
+        name: "Sol Plaatje University",
+        domains: ["@spu.ac.za", "@student.spu.ac.za"],
+        code: "SPU"
+      },
+      {
+        name: "University of Mpumalanga",
+        domains: ["@ump.ac.za", "@student.ump.ac.za"],
+        code: "UMP"
+      }
+    ];
+
+    // Form validation and submission
+    class SignupForm {
+      constructor() {
+        this.form = document.getElementById('signupForm');
+        this.submitBtn = document.getElementById('submitBtn');
+        this.spinner = document.querySelector('.spinner');
+        this.alertContainer = document.getElementById('alertContainer');
+        this.selectedUniversity = null;
+        
+        this.initializeUniversities();
+        this.initializeEventListeners();
+      }
+
+      initializeUniversities() {
+        const universitySelect = document.getElementById('university');
+        
+        saUniversities.forEach(uni => {
+          const option = document.createElement('option');
+          option.value = uni.code;
+          option.textContent = uni.name;
+          option.dataset.domains = JSON.stringify(uni.domains);
+          universitySelect.appendChild(option);
+        });
+      }
+
+      initializeEventListeners() {
+        this.form.addEventListener('submit', this.handleSubmit.bind(this));
+        
+        // University selection handler
+        document.getElementById('university').addEventListener('change', this.handleUniversityChange.bind(this));
+        
+        // Real-time validation
+        const inputs = this.form.querySelectorAll('input, select');
+        inputs.forEach(input => {
+          input.addEventListener('blur', () => this.validateField(input));
+          input.addEventListener('input', () => this.clearFieldError(input));
+        });
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', this.checkPasswordStrength.bind(this));
+        
+        // Confirm password matching
+        document.getElementById('confirmPassword').addEventListener('input', this.checkPasswordMatch.bind(this));
+      }
+
+      handleUniversityChange(e) {
+        const selectedOption = e.target.selectedOptions[0];
+        if (selectedOption && selectedOption.dataset.domains) {
+          this.selectedUniversity = {
+            name: selectedOption.textContent,
+            code: selectedOption.value,
+            domains: JSON.parse(selectedOption.dataset.domains)
+          };
+          
+          const emailHint = document.getElementById('emailHint');
+          emailHint.textContent = `Use your ${this.selectedUniversity.name} email (e.g., student${this.selectedUniversity.domains[0]})`;
+          
+          // Clear email validation if university changes
+          const emailField = document.getElementById('email');
+          this.clearFieldError(emailField);
+        } else {
+          this.selectedUniversity = null;
+          document.getElementById('emailHint').textContent = 'Enter your university email address';
+        }
+      }
+
+      validateField(field) {
+        const value = field.value.trim();
+        let isValid = true;
+        let message = '';
+
+        switch(field.id) {
+          case 'university':
+            if (!value) {
+              message = 'Please select your university';
+              isValid = false;
+            }
+            break;
+
+          case 'email':
+            if (!value) {
+              message = 'Email is required';
+              isValid = false;
+            } else if (!this.isValidEmail(value)) {
+              message = 'Please enter a valid email address';
+              isValid = false;
+            } else if (!this.isValidUniversityEmail(value)) {
+              message = this.selectedUniversity 
+                ? `Must be a ${this.selectedUniversity.name} email address`
+                : 'Please select your university first';
+              isValid = false;
+            }
+            break;
+
+          case 'fullName':
+            if (!value) {
+              message = 'Full name is required';
+              isValid = false;
+            } else if (value.length < 2) {
+              message = 'Name must be at least 2 characters';
+              isValid = false;
+            }
+            break;
+
+          case 'password':
+            if (!value) {
+              message = 'Password is required';
+              isValid = false;
+            } else if (value.length < 8) {
+              message = 'Password must be at least 8 characters';
+              isValid = false;
+            }
+            break;
+
+          case 'confirmPassword':
+            const password = document.getElementById('password').value;
+            if (!value) {
+              message = 'Please confirm your password';
+              isValid = false;
+            } else if (value !== password) {
+              message = 'Passwords do not match';
+              isValid = false;
+            }
+            break;
+
+          case 'terms':
+            if (!field.checked) {
+              message = 'You must agree to the terms and conditions';
+              isValid = false;
+            }
+            break;
+        }
+
+        this.setFieldValidation(field, isValid, message);
+        return isValid;
+      }
+
+      isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      isValidUniversityEmail(email) {
+        if (!this.selectedUniversity) return false;
+        
+        return this.selectedUniversity.domains.some(domain => 
+          email.toLowerCase().endsWith(domain.toLowerCase())
+        );
+      }
+
+      setFieldValidation(field, isValid, message) {
+        const feedback = field.parentNode.querySelector('.invalid-feedback');
+        
+        if (isValid) {
+          field.classList.remove('is-invalid');
+          field.classList.add('is-valid');
+          if (feedback) feedback.classList.remove('show');
+        } else {
+          field.classList.remove('is-valid');
+          field.classList.add('is-invalid');
+          if (feedback) {
+            feedback.textContent = message;
+            feedback.classList.add('show');
+          }
+        }
+      }
+
+      clearFieldError(field) {
+        field.classList.remove('is-invalid');
+        const feedback = field.parentNode.querySelector('.invalid-feedback');
+        if (feedback) feedback.classList.remove('show');
+      }
+
+      checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthFill = document.querySelector('.strength-fill');
+        const strengthLevel = document.getElementById('strengthLevel');
+        
+        let strength = 0;
+        let level = 'Weak';
+        let className = 'strength-weak';
+
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]/)) strength++;
+        if (password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+        if (strength >= 4) {
+          level = 'Strong';
+          className = 'strength-strong';
+        } else if (strength >= 2) {
+          level = 'Medium';
+          className = 'strength-medium';
+        }
+
+        strengthFill.style.width = `${(strength / 5) * 100}%`;
+        strengthFill.className = `strength-fill ${className}`;
+        strengthLevel.textContent = password.length === 0 ? 'Enter a password' : level;
+      }
+
+      checkPasswordMatch() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword');
+        
+        if (confirmPassword.value && confirmPassword.value !== password) {
+          this.setFieldValidation(confirmPassword, false, 'Passwords do not match');
+        } else if (confirmPassword.value === password && password.length > 0) {
+          this.setFieldValidation(confirmPassword, true, '');
+        }
+      }
+
+      validateForm() {
+        const fields = this.form.querySelectorAll('input[required], select[required]');
+        let isValid = true;
+
+        fields.forEach(field => {
+          if (!this.validateField(field)) {
+            isValid = false;
+          }
+        });
+
+        return isValid;
+      }
+
+      showAlert(type, message) {
+        this.alertContainer.innerHTML = `
+          <div class="alert alert-${type}">
+            ${message}
+          </div>
+        `;
+        
+        setTimeout(() => {
+          this.alertContainer.innerHTML = '';
+        }, 5000);
+      }
+
+      setLoading(loading) {
+        if (loading) {
+          this.submitBtn.disabled = true;
+          this.spinner.style.display = 'inline-block';
+          this.submitBtn.innerHTML = '<div class="spinner"></div>Creating Account...';
+        } else {
+          this.submitBtn.disabled = false;
+          this.spinner.style.display = 'none';
+          this.submitBtn.innerHTML = 'Create Account';
+        }
+      }
+
+      async handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!this.validateForm()) {
+          this.showAlert('danger', 'Please fix the errors above and try again.');
+          return;
+        }
+
+        this.setLoading(true);
+
+        try {
+          const response = await fetch('/api/auth/register.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: document.getElementById('email').value,
+              password: document.getElementById('password').value,
+              full_name: document.getElementById('fullName').value,
+              university: this.selectedUniversity?.name,
+              university_code: this.selectedUniversity?.code,
+              student_number: document.getElementById('studentNumber').value
+            })
+          });
+
+          const data = await response.json();
+          
+          if (data.success) {
+            this.showAlert('success', 'Account created successfully! Redirecting to dashboard...');
+            
+            // Reset form
+            this.form.reset();
+            const inputs = this.form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+              input.classList.remove('is-valid', 'is-invalid');
+            });
+
+            // Reset password strength indicator
+            document.querySelector('.strength-fill').style.width = '0%';
+            document.getElementById('strengthLevel').textContent = 'Enter a password';
+            
+            // Close modal and redirect to dashboard after 2 seconds
+            setTimeout(() => {
+              const modal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
+              modal.hide();
+              window.location.href = 'dashboard.html';
+            }, 2000);
+            
+          } else {
+            this.showAlert('danger', data.message || 'Registration failed. Please try again.');
+          }
+        } catch (error) {
+          this.showAlert('danger', 'Network error. Please check your connection and try again.');
+          console.error('Signup error:', error);
+        } finally {
+          this.setLoading(false);
+        }
+      }
+    }
+
+    // Initialize the form when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      new SignupForm();
+    });
+  </script>
+</body>
+</html>
